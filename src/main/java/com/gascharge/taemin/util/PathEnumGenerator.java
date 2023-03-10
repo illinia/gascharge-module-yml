@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import static com.gascharge.taemin.enums.Module.from;
@@ -33,7 +34,6 @@ public class PathEnumGenerator {
     }
 
     public static File getFile(Resource r) {
-        File file;
         try {
             return r.getFile();
         } catch (IOException e) {

@@ -3,7 +3,6 @@ plugins {
     id 'org.springframework.boot' version '2.7.3'
     id 'io.spring.dependency-management' version '1.1.0'
     id 'maven-publish'
-    id 'com.github.johnrengelman.shadow' version '7.0.0'
 }
 
 group = 'com.gascharge.taemin'
@@ -34,24 +33,15 @@ bootJar {
     enabled = false
 }
 
-shadowJar {
-    archiveClassifier.set('')
-}
-
 jar {
-    enabled = false
-    finalizedBy shadowJar
-    from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
-    }
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    enabled = true
 }
 
 publishing {
     repositories {
         maven {
             name = "GitHubPackages"
-            url = uri("https://maven.pkg.github.com/illinia/gascharge-module-jpa")
+            url = uri("https://maven.pkg.github.com/illinia/gascharge-module-yml")
             credentials {
                 username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
                 password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
@@ -60,7 +50,7 @@ publishing {
     }
     publications {
         gpr(MavenPublication) {
-            artifacts = [ shadowJar ]
+            artifact jar
         }
     }
 }

@@ -52,7 +52,7 @@ public class YmlEnvironmentPostProcessor implements EnvironmentPostProcessor {
                 return Optional.empty();
             }
             return Optional.of(load.get(0));
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             throw new IllegalStateException("Failed to load yaml configuration from " + path, ex);
         }
     }
