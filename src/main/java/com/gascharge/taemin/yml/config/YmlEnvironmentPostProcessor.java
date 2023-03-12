@@ -1,4 +1,4 @@
-package com.gascharge.taemin.config;
+package com.gascharge.taemin.yml.config;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.SpringApplication;
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import static com.gascharge.taemin.util.PathEnumGenerator.getProjectName;
+import static com.gascharge.taemin.yml.util.PathEnumGenerator.getProjectName;
 
 @Slf4j
 public class YmlEnvironmentPostProcessor implements EnvironmentPostProcessor {
@@ -29,7 +29,8 @@ public class YmlEnvironmentPostProcessor implements EnvironmentPostProcessor {
         ResourcePatternResolver resourcePatternResolver = new PathMatchingResourcePatternResolver();
         List<Resource> resources;
         try {
-            resources = Arrays.stream(resourcePatternResolver.getResources("classpath*:application.yml"))
+            Resource[] resolverResources = resourcePatternResolver.getResources("classpath*:application.yml");
+            resources = Arrays.stream(resolverResources)
                     .sorted(new ModuleComparator()).collect(Collectors.toList());
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -47,13 +48,16 @@ public class YmlEnvironmentPostProcessor implements EnvironmentPostProcessor {
     private Optional<PropertySource<?>> loadYaml(Resource path) {
         Assert.isTrue(path.exists(), () -> "Resource " + path + " does not exist");
         try {
-            List<PropertySource<?>> load = this.loader.load(getProjectName(path), path);
+            String projectName = getProjectName(path);
+            List<PropertySource<?>> load = this.loader.load(projectName, path);
             if (load.isEmpty()) {
                 return Optional.empty();
             }
             return Optional.of(load.get(0));
         } catch (Exception ex) {
-            throw new IllegalStateException("Failed to load yaml configuration from " + path, ex);
+            log.error(ex.toString());
+//            throw new IllegalStateException("Failed to load yaml configuration from " + path, ex);
+            return Optional.empty();
         }
     }
 }

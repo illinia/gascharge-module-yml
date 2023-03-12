@@ -1,11 +1,12 @@
-package com.gascharge.taemin.config;
+package com.gascharge.taemin.yml.config;
 
+import com.gascharge.taemin.yml.enums.Module;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.io.Resource;
 
 import java.util.Comparator;
 
-import static com.gascharge.taemin.util.PathEnumGenerator.getModuleEnum;
+import static com.gascharge.taemin.yml.util.PathEnumGenerator.getModuleEnum;
 
 /**
  * {@link YmlEnvironmentPostProcessor} 에서 {@link ConfigurableEnvironment} 에 propertySources 에서
@@ -15,13 +16,17 @@ import static com.gascharge.taemin.util.PathEnumGenerator.getModuleEnum;
 public class ModuleComparator implements Comparator<Resource> {
     /**
      * 모듈 오름차순 정렬을 위한 메서드
-     * {@link com.gascharge.taemin.enums.Module} enum 의 order 값이 낮을 수록 propertySources 앞에 정렬된다.
+     * {@link Module} enum 의 order 값이 낮을 수록 propertySources 앞에 정렬된다.
      */
     @Override
     public int compare(Resource o1, Resource o2) {
-        int o1Order = getModuleEnum(o1).getOrder();
-        int o2Order = getModuleEnum(o2).getOrder();
+        try {
+            int o1Order = getModuleEnum(o1).getOrder();
+            int o2Order = getModuleEnum(o2).getOrder();
 
-        return o1Order - o2Order;
+            return o1Order - o2Order;
+        } catch (Exception e) {
+            return -100;
+        }
     }
 }

@@ -1,4 +1,4 @@
-package com.gascharge.taemin.enums;
+package com.gascharge.taemin.yml.enums;
 
 import lombok.Getter;
 
