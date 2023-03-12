@@ -16,19 +16,14 @@ import java.util.regex.Pattern;
 public class PathEnumGenerator {
     private static final String PROJECT_PREFIX = "gascharge-";
     public static Module getModuleEnum(Resource r) {
-        String input = null;
-        try {
-            input = r.getURL().getPath();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        String regex = ".*gascharge-(.*)-.*";
-        Pattern pattern = Pattern.compile(regex);
-        Matcher matcher = pattern.matcher(input);
+        String projectName = getProjectName(r);
 
+        String regex = "gascharge-(.+?)-.+";
+        Pattern pattern = Pattern.compile(regex);
+        Matcher matcher = pattern.matcher(projectName);
         String result = null;
-        if (matcher.matches()) {
-            result = matcher.group(1); // 정규식에 맞는 첫 번째 그룹 추출
+        if (matcher.find()) {
+            result = matcher.group(1);
         }
 
         return Module.from(result);
