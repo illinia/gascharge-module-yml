@@ -4,17 +4,12 @@ import com.gascharge.taemin.yml.enums.Module;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.io.Resource;
 
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 @Slf4j
 public class PathEnumGenerator {
-    private static final String PROJECT_PREFIX = "gascharge-";
     public static Module getModuleEnum(Resource r) {
         String projectName = getProjectName(r);
 
